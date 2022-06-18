@@ -1,0 +1,39 @@
+.TodoTemplate {
+ 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 850px;
+    height: 550px;
+    transform: translate(-50%, -50%);
+    background-color: #393F49;
+    border-radius: 5px;
+    padding: 4rem;
+    box-shadow: 5px 5px 15px 5px rgb(0 0 0 / 30%);
+    .app-title {
+     
+        height: 5rem;
+        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    .content {
+      color: #999900;
+        
+    }
+  
+     
+    }
+    .login-title {
+     position: absolute;
+      height: 2rem;
+      font-size: 20px;
+      color: whitesmoke;
+      cursor: pointer;
+      &:hover {
+        color: blueviolet;
+      }
+      margin-left: 790px;
+      top: 15px;
+    }
