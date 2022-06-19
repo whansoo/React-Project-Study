@@ -1,11 +1,14 @@
 import React, { useRef, useState} from "react";
 import TodoTemplate from "./components/TodoTemplate";
-import TodoInsert from './components/TodoInsert';
 import TodoList from "./components/TodoList";
+import TodoInsert from './components/TodoInsert';
+import ToDoEdit from "./components/ToDoEdit";
 
 
 
 const App = () => {
+  const [selectedTodo, setSelectedTodo] = useState(null);
+  const [insertToggle, setInsertToggle] = useState(false); //플래그 역할을 해줄 state
   const [todos, setTodos] = useState([
     { id:1, text: '오늘의 할 일 목록 만들기', checked: true },
   ])
@@ -31,11 +34,27 @@ const App = () => {
         ),
       );
     };
-   
+    const onInsertToggle = () => {
+      if (selectedTodo) {
+        setSelectedTodo(null);
+      }
+      setInsertToggle((prev) => !prev);
+    };
+    const onChangeSelectedTodo = (todo) => {
+      setSelectedTodo(todo);
+    }; 
+
+    const onUpdate = (id, text) => {
+      onInsertToggle();
+      
+      setTodos(todos.map((todo) => (todo.id === id ? { ...todo, text } : todo)));
+    };
+
     return (
       <TodoTemplate>
-         <TodoInsert onInsert={onInsert}  />
-         <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle}/>
+        {insertToggle && (<ToDoEdit onUpdate={onUpdate} selectedTodo={selectedTodo}/>)}
+        <TodoInsert onInsert={onInsert}  />
+         <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle} onChangeSelectedTodo={onChangeSelectedTodo} onInsertToggle={onInsertToggle}/>
       </TodoTemplate>
     )
   };
