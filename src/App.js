@@ -1,4 +1,4 @@
-import React, { useRef, useState} from "react";
+import React, { useRef, useState, useEffect} from "react";
 import TodoTemplate from "./components/TodoTemplate";
 import TodoList from "./components/TodoList";
 import TodoInsert from './components/TodoInsert';
@@ -6,13 +6,38 @@ import ToDoEdit from "./components/ToDoEdit";
 
 
 
+
+
 const App = () => {
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [insertToggle, setInsertToggle] = useState(false); //플래그 역할을 해줄 state
-  const [todos, setTodos] = useState([
-    { id:1, text: '오늘의 할 일 목록 만들기', checked: true },
-  ])
- 
+  const [todos, setTodos] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = window.localStorage.getItem("todoKey");
+      if (saved !== null) {
+        return JSON.parse(saved);
+      } else {
+        return [
+          { id:1, text: '오늘의 할 일 목록 만들기', checked: true },
+        ];
+      }
+    }
+  });
+   
+    
+
+  useEffect(() => {
+    window.localStorage.setItem("todoKey", JSON.stringify(todos));
+  }, [todos]);
+
+  
+  useEffect(() => {
+    const data = localStorage.getItem('todoKey');
+    if (data) {
+      setTodos(JSON.parse(data));
+    }
+  }, []);
+
   const nextId = useRef(2);
  const onInsert = text => {
       const todo = {
@@ -27,6 +52,8 @@ const App = () => {
   const onRemove = id => {
       setTodos(todos.filter(todo => todo.id !== id));
     };
+
+
 
   const onToggle = id => {
       setTodos(
@@ -53,7 +80,7 @@ const App = () => {
     return (
       <TodoTemplate>
         {insertToggle && (<ToDoEdit onUpdate={onUpdate} selectedTodo={selectedTodo}/>)}
-        <TodoInsert onInsert={onInsert}  />
+        <TodoInsert onInsert={onInsert} todos={todos}  />
          <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle} onChangeSelectedTodo={onChangeSelectedTodo} onInsertToggle={onInsertToggle}/>
       </TodoTemplate>
     )

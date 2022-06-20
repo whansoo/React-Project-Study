@@ -7,7 +7,7 @@ function ToDoEdit({ selectedTodo, onUpdate }) {
     const onChange = e => {
       setValue(e.target.value);
     };
-    
+
     const onSubmit = e => {
           onUpdate(selectedTodo.id, value);
           setValue(''); //value 초기화
