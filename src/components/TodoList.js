@@ -13,4 +13,4 @@ const TodoList = ({ todos, onRemove, onToggle, onChangeSelectedTodo, onInsertTog
     );
 };
 
-export default TodoList;
+export default React.memo(TodoList);

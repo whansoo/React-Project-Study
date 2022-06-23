@@ -1,12 +1,8 @@
-import React, { useRef, useState, useEffect} from "react";
+import React, { useRef, useState, useEffect, useCallback} from "react";
 import TodoTemplate from "./components/TodoTemplate";
 import TodoList from "./components/TodoList";
 import TodoInsert from './components/TodoInsert';
 import ToDoEdit from "./components/ToDoEdit";
-
-
-
-
 
 const App = () => {
   const [selectedTodo, setSelectedTodo] = useState(null);
@@ -25,7 +21,6 @@ const App = () => {
   });
    
     
-
   useEffect(() => {
     window.localStorage.setItem("todoKey", JSON.stringify(todos));
   }, [todos]);
@@ -37,30 +32,30 @@ const App = () => {
       setTodos(JSON.parse(data));
     }
   }, []);
-
+  //ref를 사용하여 변수를 담는다.
   const nextId = useRef(2);
- const onInsert = text => {
+ const onInsert = useCallback(text => {
       const todo = {
         id: nextId.current,
         text,
         checked: false,
       };
-      setTodos(todos.concat(todo));
+      setTodos(todos=>todos.concat(todo));
       nextId.current += 1; 
-    };
+    },[]);
 
-  const onRemove = id => {
-      setTodos(todos.filter(todo => todo.id !== id));
-    };
+  const onRemove = useCallback(id => {
+      setTodos(todos=>todos.filter(todo => todo.id !== id));
+    },[]);
 
 
 
-  const onToggle = id => {
-      setTodos(
+  const onToggle = useCallback(id => {
+      setTodos(todos =>
         todos.map(todo => todo.id === id ? { ...todo, checked: !todo.checked } : todo,
         ),
       );
-    };
+    },[]);
     const onInsertToggle = () => {
       if (selectedTodo) {
         setSelectedTodo(null);
